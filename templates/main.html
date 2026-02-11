@@ -1,0 +1,206 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MercadoVerde - Tu Lista de Compra Natural</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Georgia", "Palatino", serif;
+        background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+      }
+
+      header {
+        background: linear-gradient(135deg, #2e7d32 0%, #388e3c 100%);
+        color: #fff;
+        padding: 30px 20px;
+        box-shadow: 0 4px 12px rgba(46, 125, 50, 0.3);
+        text-align: center;
+      }
+
+      header h1 {
+        font-size: 2.5rem;
+        font-weight: 400;
+        letter-spacing: 2px;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+      }
+
+      .leaf-icon {
+        display: inline-block;
+        font-size: 2rem;
+        margin: 0 10px;
+      }
+
+      header p {
+        font-size: 1.1rem;
+        color: #c8e6c9;
+        margin-top: 10px;
+        font-style: italic;
+      }
+
+      main {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 40px 20px;
+      }
+
+      .welcome-container {
+        background: rgba(255, 255, 255, 0.95);
+        border-radius: 20px;
+        padding: 60px 50px;
+        box-shadow: 0 8px 32px rgba(46, 125, 50, 0.2);
+        text-align: center;
+        max-width: 500px;
+        width: 100%;
+        border: 3px solid #66bb6a;
+      }
+
+      .welcome-container h2 {
+        font-size: 2rem;
+        margin-bottom: 15px;
+        color: #2e7d32;
+        font-weight: 400;
+      }
+
+      .welcome-container p {
+        color: #558b2f;
+        margin-bottom: 35px;
+        font-size: 1.1rem;
+        line-height: 1.6;
+      }
+
+      .nature-icon {
+        font-size: 4rem;
+        margin-bottom: 20px;
+        animation: bounce 2s infinite;
+      }
+
+      @keyframes bounce {
+        0%,
+        100% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(-10px);
+        }
+      }
+
+      .login-btn {
+        background: linear-gradient(135deg, #66bb6a 0%, #4caf50 100%);
+        color: #fff;
+        border: none;
+        padding: 18px 60px;
+        font-size: 1.2rem;
+        border-radius: 50px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        display: inline-block;
+        box-shadow: 0 4px 15px rgba(76, 175, 80, 0.4);
+        font-weight: 500;
+        letter-spacing: 1px;
+      }
+
+      .login-btn:hover {
+        background: linear-gradient(135deg, #4caf50 0%, #388e3c 100%);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(76, 175, 80, 0.5);
+      }
+
+      .login-btn:active {
+        transform: translateY(0);
+      }
+
+      footer {
+        background: linear-gradient(135deg, #2e7d32 0%, #388e3c 100%);
+        color: #c8e6c9;
+        text-align: center;
+        padding: 20px;
+        font-size: 0.9rem;
+      }
+
+      .features {
+        margin-top: 30px;
+        text-align: left;
+      }
+
+      .feature-item {
+        display: flex;
+        align-items: center;
+        margin: 10px 0;
+        color: #558b2f;
+      }
+
+      .feature-item span {
+        font-size: 1.5rem;
+        margin-right: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>
+        <span class="leaf-icon">🌿</span>MercadoVerde<span class="leaf-icon"
+          >🌿</span
+        >
+      </h1>
+      <p>Organiza tu compra de forma natural y sostenible</p>
+    </header>
+
+    <main>
+      <div class="welcome-container">
+        <div class="nature-icon">🛒</div>
+        <h2>Bienvenido</h2>
+        <p>
+          Accede a tu lista de compra personalizada y organiza tus productos de
+          manera ecológica
+        </p>
+
+        <div class="features">
+          <div class="feature-item">
+            <span>✓</span>
+            <span>Organiza por categorías</span>
+          </div>
+          <div class="feature-item">
+            <span>✓</span>
+            <span>Productos ecológicos</span>
+          </div>
+          <div class="feature-item">
+            <span>✓</span>
+            <span>Comparte con tu familia</span>
+          </div>
+        </div>
+
+        <a href="login.html" class="login-btn">Acceder</a>
+      </div>
+    </main>
+
+    <footer>
+      <p>🌱 2025 MercadoVerde - Compra consciente, vida sostenible 🌱</p>
+    </footer>
+
+    <script>
+      const STORAGE_USER_KEY = "mercadoverde_current_user";
+
+      window.onload = function () {
+        const loggedUser =
+          localStorage.getItem(STORAGE_USER_KEY) ||
+          sessionStorage.getItem("loggedUser");
+        if (loggedUser) {
+          window.location.href = "dashboard.html";
+        }
+      };
+    </script>
+  </body>
+</html>
