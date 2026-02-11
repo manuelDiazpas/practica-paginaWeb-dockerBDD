@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>COPINSA - Login</title>
+    <title>MercadoVerde - Iniciar Sesión</title>
     <!-- LIBRERÍA CERTIFICADA: Google reCAPTCHA v2 - Firmada digitalmente por Google -->
     <script src="https://www.google.com/recaptcha/api.js" async defer></script>
     <style>
@@ -14,30 +14,38 @@
       }
 
       body {
-        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-        background: #f5f5f5;
+        font-family: "Georgia", "Palatino", serif;
+        background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
         min-height: 100vh;
         display: flex;
         flex-direction: column;
       }
 
       header {
-        background: #000;
+        background: linear-gradient(135deg, #2e7d32 0%, #388e3c 100%);
         color: #fff;
-        padding: 20px;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        padding: 25px 20px;
+        box-shadow: 0 4px 12px rgba(46, 125, 50, 0.3);
         text-align: center;
       }
 
       header h1 {
-        font-size: 1.8rem;
-        font-weight: 600;
+        font-size: 2rem;
+        font-weight: 400;
+        letter-spacing: 2px;
+      }
+
+      .leaf-icon {
+        display: inline-block;
+        font-size: 1.5rem;
+        margin: 0 8px;
       }
 
       header p {
-        font-size: 0.9rem;
-        color: #ccc;
-        margin-top: 5px;
+        font-size: 0.95rem;
+        color: #c8e6c9;
+        margin-top: 8px;
+        font-style: italic;
       }
 
       main {
@@ -49,50 +57,63 @@
       }
 
       .login-form-container {
-        background: #fff;
-        border-radius: 8px;
-        padding: 40px;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        max-width: 450px;
+        background: rgba(255, 255, 255, 0.95);
+        border-radius: 20px;
+        padding: 45px;
+        box-shadow: 0 8px 32px rgba(46, 125, 50, 0.2);
+        max-width: 480px;
         width: 100%;
+        border: 3px solid #66bb6a;
       }
 
       .login-form-container h2 {
         text-align: center;
         margin-bottom: 30px;
-        color: #000;
-        font-size: 1.5rem;
+        color: #2e7d32;
+        font-size: 1.8rem;
+        font-weight: 400;
+      }
+
+      .form-icon {
+        text-align: center;
+        font-size: 3rem;
+        margin-bottom: 20px;
       }
 
       .form-group {
-        margin-bottom: 20px;
+        margin-bottom: 25px;
       }
 
       .form-group label {
         display: block;
-        margin-bottom: 8px;
-        color: #333;
-        font-size: 0.9rem;
+        margin-bottom: 10px;
+        color: #2e7d32;
+        font-size: 1rem;
         font-weight: 500;
       }
 
       .form-control {
         width: 100%;
-        padding: 12px;
-        border: 1px solid #ddd;
-        border-radius: 4px;
-        font-size: 0.95rem;
+        padding: 14px;
+        border: 2px solid #a5d6a7;
+        border-radius: 10px;
+        font-size: 1rem;
         font-family: inherit;
+        transition: all 0.3s ease;
+        background: #f1f8e9;
       }
 
       .form-control:focus {
         outline: none;
-        border-color: #000;
+        border-color: #4caf50;
+        background: white;
+        box-shadow: 0 0 10px rgba(76, 175, 80, 0.2);
       }
 
       .recaptcha-container {
-        margin: 20px 0;
+        margin: 25px 0;
         display: none;
+        text-align: center;
       }
 
       .recaptcha-container.show {
@@ -100,65 +121,60 @@
       }
 
       .btn-login {
-        background: #000;
+        background: linear-gradient(135deg, #66bb6a 0%, #4caf50 100%);
         color: white;
         border: none;
-        padding: 12px;
+        padding: 15px;
         width: 100%;
-        border-radius: 4px;
-        font-size: 1rem;
+        border-radius: 50px;
+        font-size: 1.1rem;
         cursor: pointer;
         transition: all 0.3s ease;
-        margin-top: 10px;
+        margin-top: 15px;
+        box-shadow: 0 4px 15px rgba(76, 175, 80, 0.4);
+        font-weight: 500;
+        letter-spacing: 1px;
       }
 
       .btn-login:hover {
-        background: #333;
+        background: linear-gradient(135deg, #4caf50 0%, #388e3c 100%);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(76, 175, 80, 0.5);
       }
 
       .btn-login:disabled {
-        background: #ccc;
+        background: #c8e6c9;
         cursor: not-allowed;
+        transform: none;
+        box-shadow: none;
       }
 
       .error-message {
-        color: #d32f2f;
-        font-size: 0.9rem;
-        margin-top: 10px;
+        color: #d84315;
+        font-size: 0.95rem;
+        margin-top: 15px;
         display: none;
         text-align: center;
+        padding: 12px;
+        background: #ffccbc;
+        border-radius: 8px;
+        border: 1px solid #ff8a65;
       }
 
       .error-message.show {
         display: block;
       }
 
-      .recovery-link {
-        display: none;
-        text-align: center;
-        margin-top: 15px;
-      }
-
-      .recovery-link.show {
-        display: block;
-      }
-
-      .recovery-link a {
-        color: #000;
-        text-decoration: none;
-      }
-
-      .recovery-link a:hover {
-        text-decoration: underline;
-      }
-
       .timer {
-        color: #d32f2f;
+        color: #d84315;
         font-weight: bold;
         font-size: 1rem;
         text-align: center;
-        margin-top: 10px;
+        margin-top: 15px;
         display: none;
+        padding: 12px;
+        background: #ffccbc;
+        border-radius: 8px;
       }
 
       .timer.show {
@@ -167,83 +183,95 @@
 
       .password-requirements {
         font-size: 0.85rem;
-        color: #666;
-        margin-top: 5px;
+        color: #558b2f;
+        margin-top: 8px;
+        font-style: italic;
       }
 
       .back-link {
         text-align: center;
-        margin-top: 20px;
+        margin-top: 25px;
       }
 
       .back-link a {
-        color: #666;
+        color: #558b2f;
         text-decoration: none;
-        font-size: 0.9rem;
+        font-size: 1rem;
+        transition: color 0.3s ease;
       }
 
       .back-link a:hover {
-        color: #000;
-      }
-
-      .session-timer {
-        position: fixed;
-        bottom: 20px;
-        right: 20px;
-        background: #fff;
-        border: 2px solid #f57c00;
-        padding: 15px 20px;
-        border-radius: 8px;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-        z-index: 1000;
-        display: none;
-      }
-
-      .session-timer.show {
-        display: block;
-      }
-
-      .timer-text {
-        font-size: 0.9rem;
-        color: #666;
-        margin-bottom: 5px;
-      }
-
-      .timer-countdown {
-        font-size: 1.5rem;
-        font-weight: bold;
-        color: #000;
+        color: #2e7d32;
+        text-decoration: underline;
       }
 
       footer {
-        background: #000;
-        color: #fff;
+        background: linear-gradient(135deg, #2e7d32 0%, #388e3c 100%);
+        color: #c8e6c9;
         text-align: center;
         padding: 15px;
         font-size: 0.85rem;
+      }
+
+      .info-box {
+        background: #e8f5e9;
+        padding: 15px;
+        border-radius: 10px;
+        margin-bottom: 20px;
+        border-left: 4px solid #4caf50;
+      }
+
+      .info-box p {
+        color: #2e7d32;
+        font-size: 0.9rem;
+        margin: 5px 0;
+      }
+
+      .info-box strong {
+        color: #1b5e20;
       }
     </style>
   </head>
   <body>
     <header>
-      <h1>COPINSA</h1>
-      <p>Sistema de Gestión de Tickets de Seguridad</p>
+      <h1>
+        <span class="leaf-icon">🌿</span>MercadoVerde<span class="leaf-icon"
+          >🌿</span
+        >
+      </h1>
+      <p>Tu lista de compra natural</p>
     </header>
 
     <main>
       <div class="login-form-container">
+        <div class="form-icon">🥬</div>
         <h2>Iniciar Sesión</h2>
+
+        <div class="info-box">
+          <p><strong>Usuarios de prueba:</strong></p>
+          <p>👤 <strong>admin</strong> / Admin123!</p>
+          <p>👤 <strong>usuario</strong> / User123!</p>
+          <p>👤 <strong>familia</strong> / Fam123!</p>
+        </div>
+
         <form id="loginForm">
           <div class="form-group">
-            <label for="username">Usuario</label>
-            <input type="text" class="form-control" id="username" required />
+            <label for="username">👤 Usuario</label>
+            <input
+              type="text"
+              class="form-control"
+              id="username"
+              placeholder="Ingresa tu usuario"
+              required
+            />
           </div>
           <div class="form-group">
-            <label for="password">Contraseña</label>
+            <label for="password">🔒 Contraseña</label>
             <input
               type="password"
               class="form-control"
               id="password"
+              placeholder="Ingresa tu contraseña"
               required
             />
             <div class="password-requirements">
@@ -261,7 +289,7 @@
           </div>
 
           <button type="submit" class="btn-login" id="loginBtn">
-            Iniciar Sesión
+            🌱 Acceder a mi Lista
           </button>
           <div class="error-message" id="errorMessage"></div>
           <div class="timer" id="timer"></div>
@@ -273,13 +301,13 @@
     </main>
 
     <footer>
-      <p>&copy; 2025 COPINSA - Todos los derechos reservados</p>
+      <p>🌱 2025 MercadoVerde - Compra consciente, vida sostenible 🌱</p>
     </footer>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
     <script>
-      const STORAGE_USER_KEY = "copinsa_current_user";
-      const LOGIN_ATTEMPTS_KEY = "copinsa_login_attempts";
+      const STORAGE_USER_KEY = "mercadoverde_current_user";
+      const LOGIN_ATTEMPTS_KEY = "mercadoverde_login_attempts";
 
       // Base de datos con 3 usuarios. Comprobaciones de contraseña con SHA256
       const users = {
@@ -291,20 +319,19 @@
           password: CryptoJS.SHA256("User123!").toString(),
           role: "user",
         },
-        tecnico: {
-          password: CryptoJS.SHA256("Tech123!").toString(),
+        familia: {
+          password: CryptoJS.SHA256("Fam123!").toString(),
           role: "user",
         },
       };
 
       let attempts = parseInt(localStorage.getItem("loginAttempts") || "0");
       let blockedUntil = parseInt(localStorage.getItem("blockedUntil") || "0");
-      let showCaptcha = attempts >= 3; //se muestra al fallar 3 intentos
+      let showCaptcha = attempts >= 3;
 
       window.onload = function () {
         checkBlockStatus();
         if (showCaptcha) {
-          //Si es verdadero, muestra captcha
           document.getElementById("recaptchaContainer").classList.add("show");
         }
       };
@@ -315,9 +342,9 @@
           startTimer(Math.ceil((blockedUntil - now) / 1000));
         }
       }
+
       /**
-       * Función para evitar inyección sql
-       * Limita caracteres especiales y un minimo de caracteres
+       * Función para validar contraseña
        */
       function validatePassword(password) {
         if (password.length < 4) return false;
@@ -389,7 +416,6 @@
             }
           }
 
-          /*Si no está corecto, se guarda el usuario en intentos fallidos para el admin*/
           if (!validatePassword(password)) {
             errorMsg.textContent =
               "La contraseña no cumple los requisitos de seguridad";
@@ -438,7 +464,6 @@
           }
         });
 
-      /*Comienza el temporizador de inactividad al hacer mal el login*/
       function startTimer(seconds) {
         const loginBtn = document.getElementById("loginBtn");
         const timerDiv = document.getElementById("timer");
@@ -446,7 +471,7 @@
         timerDiv.classList.add("show");
 
         const interval = setInterval(() => {
-          timerDiv.textContent = `Bloqueado. Tiempo restante: ${seconds}s`;
+          timerDiv.textContent = `⏳ Bloqueado. Tiempo restante: ${seconds}s`;
           seconds--;
 
           if (seconds < 0) {
