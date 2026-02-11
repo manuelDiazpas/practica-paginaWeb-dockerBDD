@@ -457,347 +457,41 @@
   </head>
   <body>
     <header>
-      <button class="logout-btn" onclick="logout()">🚪 Salir</button>
-      <a href="#" class="admin-panel-btn" id="adminPanelBtn">⚙️ Panel Admin</a>
-
+      <button class="logout-btn" onclick="location.href = '/logout'">
+        🚪 Salir
+      </button>
       <div class="header-content">
         <h1>
           <span class="leaf-icon">🌿</span>MercadoVerde<span class="leaf-icon"
             >🌿</span
           >
         </h1>
-        <p>Tu lista de compra sostenible</p>
       </div>
-
-      <div class="user-info">
-        👤 <span id="currentUser"></span>
-        <span class="admin-badge" id="adminBadge" style="display: none"
-          >ADMIN</span
-        >
-      </div>
+      <div class="user-info">👤 <span>{{ session['username'] }}</span></div>
     </header>
 
     <main>
       <div class="dashboard-container">
-        <div class="welcome-section">
-          <h2>🛒 Mi Lista de Compra</h2>
-          <p>Organiza tus productos de forma ecológica y eficiente</p>
-          <span class="eco-badge">🌱 Compra Sostenible Activa</span>
-        </div>
-
         <div class="stats-container">
           <div class="stat-box">
-            <div class="stat-icon">📝</div>
-            <div class="stat-number" id="totalProducts">8</div>
-            <div class="stat-label">Productos en lista</div>
-          </div>
-          <div class="stat-box">
-            <div class="stat-icon">🌿</div>
-            <div class="stat-number" id="ecoProducts">5</div>
-            <div class="stat-label">Productos ecológicos</div>
-          </div>
-          <div class="stat-box">
-            <div class="stat-icon">📦</div>
-            <div class="stat-number" id="categories">6</div>
-            <div class="stat-label">Categorías</div>
-          </div>
-          <div class="stat-box">
-            <div class="stat-icon">💰</div>
-            <div class="stat-number">~45€</div>
-            <div class="stat-label">Costo estimado</div>
+            <div class="stat-number">{{ products|length }}</div>
+            <div class="stat-label">En la lista</div>
           </div>
         </div>
 
-        <div class="filter-buttons">
-          <button class="filter-btn active" onclick="filterByCategory('all')">
-            🌍 Todos
-          </button>
-          <button class="filter-btn" onclick="filterByCategory('frutas')">
-            🍎 Frutas
-          </button>
-          <button class="filter-btn" onclick="filterByCategory('verduras')">
-            🥬 Verduras
-          </button>
-          <button class="filter-btn" onclick="filterByCategory('lacteos')">
-            🥛 Lácteos
-          </button>
-          <button class="filter-btn" onclick="filterByCategory('carnes')">
-            🥩 Carnes
-          </button>
-          <button class="filter-btn" onclick="filterByCategory('panaderia')">
-            🥖 Panadería
-          </button>
-          <button class="filter-btn" onclick="filterByCategory('despensa')">
-            🍝 Despensa
-          </button>
-          <button class="filter-btn" onclick="filterByCategory('bebidas')">
-            🧃 Bebidas
-          </button>
-          <button class="filter-btn" onclick="filterByCategory('limpieza')">
-            🧹 Limpieza
-          </button>
+        <div class="products-grid">
+          {% for p in products %}
+          <div class="product-card verduras">
+            <div class="product-icon">📦</div>
+            <div class="product-name">{{ p.nombreProducto }}</div>
+            <div class="product-quantity">Cantidad: {{ p.cantidad }}</div>
+            <div style="text-align: center">
+              <span class="category-badge verduras">Pendiente</span>
+            </div>
+          </div>
+          {% endfor %}
         </div>
-
-        <div class="products-grid" id="productsGrid"></div>
       </div>
     </main>
-
-    <button
-      class="add-product-btn"
-      onclick="addProduct()"
-      title="Agregar producto"
-    >
-      +
-    </button>
-
-    <div class="session-timer" id="sessionTimer">
-      <div class="timer-text">⏱️ Tiempo de sesión</div>
-      <div class="timer-countdown" id="timerCountdown">15:00</div>
-    </div>
-
-    <footer>
-      <p>🌱 2025 MercadoVerde - Compra consciente, vida sostenible 🌱</p>
-    </footer>
-
-    <script>
-      const STORAGE_USER_KEY = "mercadoverde_current_user";
-      const SESSION_TIMEOUT = 15 * 60 * 1000; // 15 minutos
-
-      let sessionTimer;
-      let countdownTimer;
-      let sessionEndTime;
-
-      const products = [
-        {
-          id: 1,
-          name: "Manzanas Orgánicas",
-          icon: "🍎",
-          quantity: "1 kg",
-          category: "frutas",
-          isEco: true,
-        },
-        {
-          id: 2,
-          name: "Lechuga Romana",
-          icon: "🥬",
-          quantity: "1 unidad",
-          category: "verduras",
-          isEco: true,
-        },
-        {
-          id: 3,
-          name: "Leche de Avena",
-          icon: "🥛",
-          quantity: "1 litro",
-          category: "lacteos",
-          isEco: true,
-        },
-        {
-          id: 4,
-          name: "Pollo de Granja",
-          icon: "🍗",
-          quantity: "500 g",
-          category: "carnes",
-          isEco: false,
-        },
-        {
-          id: 5,
-          name: "Pan Integral",
-          icon: "🥖",
-          quantity: "1 barra",
-          category: "panaderia",
-          isEco: true,
-        },
-        {
-          id: 6,
-          name: "Arroz Integral",
-          icon: "🍚",
-          quantity: "1 kg",
-          category: "despensa",
-          isEco: true,
-        },
-        {
-          id: 7,
-          name: "Zumo Natural",
-          icon: "🧃",
-          quantity: "1 litro",
-          category: "bebidas",
-          isEco: false,
-        },
-        {
-          id: 8,
-          name: "Detergente Eco",
-          icon: "🧴",
-          quantity: "1 botella",
-          category: "limpieza",
-          isEco: false,
-        },
-      ];
-
-      let currentFilter = "all";
-
-      window.onload = function () {
-        const loggedUser =
-          sessionStorage.getItem("loggedUser") ||
-          localStorage.getItem(STORAGE_USER_KEY);
-        const userRole = sessionStorage.getItem("userRole");
-
-        if (!loggedUser) {
-          alert("Debes iniciar sesión para acceder a tu lista");
-          window.location.href = "login.html";
-          return;
-        }
-
-        document.getElementById("currentUser").textContent = loggedUser;
-
-        if (userRole === "admin") {
-          document.getElementById("adminBadge").style.display = "inline-block";
-          document.getElementById("adminPanelBtn").classList.add("show");
-        }
-
-        renderProducts();
-        updateStats();
-
-        startSessionTimer();
-
-        document.addEventListener("mousemove", resetSessionTimer);
-        document.addEventListener("keypress", resetSessionTimer);
-        document.addEventListener("click", resetSessionTimer);
-        document.addEventListener("scroll", resetSessionTimer);
-      };
-
-      function startSessionTimer() {
-        sessionEndTime = Date.now() + SESSION_TIMEOUT;
-
-        document.getElementById("sessionTimer").classList.add("show");
-
-        sessionTimer = setTimeout(() => {
-          logoutDueToInactivity();
-        }, SESSION_TIMEOUT);
-
-        updateCountdown();
-        countdownTimer = setInterval(updateCountdown, 1000);
-      }
-
-      function updateCountdown() {
-        const remaining = sessionEndTime - Date.now();
-
-        if (remaining <= 0) {
-          clearInterval(countdownTimer);
-          return;
-        }
-
-        const minutes = Math.floor(remaining / 60000);
-        const seconds = Math.floor((remaining % 60000) / 1000);
-
-        const timerElement = document.getElementById("timerCountdown");
-        const timerContainer = document.getElementById("sessionTimer");
-
-        timerElement.textContent = `${minutes}:${seconds.toString().padStart(2, "0")}`;
-
-        if (remaining <= 120000) {
-          timerElement.classList.add("warning");
-          timerContainer.classList.add("warning");
-        } else {
-          timerElement.classList.remove("warning");
-          timerContainer.classList.remove("warning");
-        }
-      }
-
-      function resetSessionTimer() {
-        clearTimeout(sessionTimer);
-        clearInterval(countdownTimer);
-        startSessionTimer();
-      }
-
-      function logoutDueToInactivity() {
-        alert("Tu sesión ha expirado por inactividad (15 minutos)");
-        sessionStorage.removeItem("loggedUser");
-        sessionStorage.removeItem("userRole");
-        localStorage.removeItem(STORAGE_USER_KEY);
-        window.location.href = "login.html";
-      }
-
-      function renderProducts() {
-        const grid = document.getElementById("productsGrid");
-        grid.innerHTML = "";
-
-        const filtered =
-          currentFilter === "all"
-            ? products
-            : products.filter((p) => p.category === currentFilter);
-
-        filtered.forEach((product) => {
-          const card = document.createElement("div");
-          card.className = `product-card ${product.category}`;
-
-          const ecoBadge = product.isEco
-            ? '<span class="eco-badge-card">🌿 ECO</span>'
-            : "";
-
-          card.innerHTML = `
-                    ${ecoBadge}
-                    <div class="product-icon">${product.icon}</div>
-                    <div class="product-name">${product.name}</div>
-                    <div class="product-quantity">Cantidad: ${product.quantity}</div>
-                    <div style="text-align: center;">
-                        <span class="category-badge ${product.category}">${getCategoryText(product.category)}</span>
-                    </div>
-                `;
-
-          grid.appendChild(card);
-        });
-      }
-
-      function getCategoryText(category) {
-        const texts = {
-          frutas: "Frutas",
-          verduras: "Verduras",
-          lacteos: "Lácteos",
-          carnes: "Carnes",
-          panaderia: "Panadería",
-          despensa: "Despensa",
-          bebidas: "Bebidas",
-          limpieza: "Limpieza",
-        };
-        return texts[category] || category;
-      }
-
-      function updateStats() {
-        document.getElementById("totalProducts").textContent = products.length;
-        document.getElementById("ecoProducts").textContent = products.filter(
-          (p) => p.isEco,
-        ).length;
-
-        const uniqueCategories = [...new Set(products.map((p) => p.category))];
-        document.getElementById("categories").textContent =
-          uniqueCategories.length;
-      }
-
-      function filterByCategory(category) {
-        currentFilter = category;
-
-        document.querySelectorAll(".filter-btn").forEach((btn) => {
-          btn.classList.remove("active");
-        });
-        event.target.classList.add("active");
-
-        renderProducts();
-      }
-
-      function addProduct() {
-        alert("Funcionalidad para agregar productos en desarrollo 🌱");
-      }
-
-      function logout() {
-        sessionStorage.removeItem("loggedUser");
-        sessionStorage.removeItem("userRole");
-        localStorage.removeItem("loginAttempts");
-        localStorage.removeItem("blockedUntil");
-        localStorage.removeItem(STORAGE_USER_KEY);
-
-        window.location.href = "index.html";
-      }
-    </script>
   </body>
 </html>

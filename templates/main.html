@@ -169,38 +169,22 @@
 
         <div class="features">
           <div class="feature-item">
-            <span>✓</span>
-            <span>Organiza por categorías</span>
+            <span>✓</span><span>Organiza por categorías</span>
           </div>
           <div class="feature-item">
-            <span>✓</span>
-            <span>Productos ecológicos</span>
+            <span>✓</span><span>Productos ecológicos</span>
           </div>
           <div class="feature-item">
-            <span>✓</span>
-            <span>Comparte con tu familia</span>
+            <span>✓</span><span>Comparte con tu familia</span>
           </div>
         </div>
 
-        <a href="login.html" class="login-btn">Acceder</a>
+        <a href="{{ url_for('login') }}" class="login-btn">Acceder</a>
       </div>
     </main>
 
     <footer>
       <p>🌱 2025 MercadoVerde - Compra consciente, vida sostenible 🌱</p>
     </footer>
-
-    <script>
-      const STORAGE_USER_KEY = "mercadoverde_current_user";
-
-      window.onload = function () {
-        const loggedUser =
-          localStorage.getItem(STORAGE_USER_KEY) ||
-          sessionStorage.getItem("loggedUser");
-        if (loggedUser) {
-          window.location.href = "dashboard.html";
-        }
-      };
-    </script>
   </body>
 </html>

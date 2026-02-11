@@ -233,257 +233,73 @@
     </style>
   </head>
   <body>
-    <header>
-      <h1>
-        <span class="leaf-icon">🌿</span>MercadoVerde<span class="leaf-icon"
-          >🌿</span
-        >
-      </h1>
-      <p>Tu lista de compra natural</p>
-    </header>
+    <body>
+      <header>
+        <h1>
+          <span class="leaf-icon">🌿</span>MercadoVerde<span class="leaf-icon"
+            >🌿</span
+          >
+        </h1>
+        <p>Tu lista de compra natural</p>
+      </header>
 
-    <main>
-      <div class="login-form-container">
-        <div class="form-icon">🥬</div>
-        <h2>Iniciar Sesión</h2>
+      <main>
+        <div class="login-form-container">
+          <div class="form-icon">🥬</div>
+          <h2>Iniciar Sesión</h2>
 
-        <div class="info-box">
-          <p><strong>Usuarios de prueba:</strong></p>
-          <p>👤 <strong>admin</strong> / Admin123!</p>
-          <p>👤 <strong>usuario</strong> / User123!</p>
-          <p>👤 <strong>familia</strong> / Fam123!</p>
-        </div>
-
-        <form id="loginForm">
-          <div class="form-group">
-            <label for="username">👤 Usuario</label>
-            <input
-              type="text"
-              class="form-control"
-              id="username"
-              placeholder="Ingresa tu usuario"
-              required
-            />
-          </div>
-          <div class="form-group">
-            <label for="password">🔒 Contraseña</label>
-            <input
-              type="password"
-              class="form-control"
-              id="password"
-              placeholder="Ingresa tu contraseña"
-              required
-            />
-            <div class="password-requirements">
-              Mínimo 4 caracteres, incluir mayúsculas, minúsculas y caracteres
-              especiales
+          <form id="loginForm" method="POST" action="{{ url_for('login') }}">
+            <div class="form-group">
+              <label for="username">👤 Usuario</label>
+              <input
+                type="text"
+                class="form-control"
+                id="username"
+                name="username"
+                placeholder="Ingresa tu usuario"
+                required
+              />
             </div>
-          </div>
+            <div class="form-group">
+              <label for="password">🔒 Contraseña</label>
+              <input
+                type="password"
+                class="form-control"
+                id="password"
+                name="password"
+                placeholder="Ingresa tu contraseña"
+                required
+              />
+            </div>
 
-          <!-- RECAPTCHA (se muestra después de 3 intentos fallidos) -->
-          <div class="recaptcha-container" id="recaptchaContainer">
+            <button type="submit" class="btn-login" id="loginBtn">
+              🌱 Acceder a mi Lista
+            </button>
+
+            {% with messages = get_flashed_messages() %} {% if messages %} {%
+            for message in messages %}
             <div
-              class="g-recaptcha"
-              data-sitekey="6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI"
-            ></div>
+              class="error-message show"
+              style="
+                display: block;
+                color: #d32f2f;
+                margin-top: 10px;
+                text-align: center;
+              "
+            >
+              {{ message }}
+            </div>
+            {% endfor %} {% endif %} {% endwith %}
+          </form>
+
+          <div class="back-link">
+            <a href="{{ url_for('main') }}">← Volver al inicio</a>
           </div>
-
-          <button type="submit" class="btn-login" id="loginBtn">
-            🌱 Acceder a mi Lista
-          </button>
-          <div class="error-message" id="errorMessage"></div>
-          <div class="timer" id="timer"></div>
-        </form>
-        <div class="back-link">
-          <a href="index.html">← Volver al inicio</a>
         </div>
-      </div>
-    </main>
-
-    <footer>
-      <p>🌱 2025 MercadoVerde - Compra consciente, vida sostenible 🌱</p>
-    </footer>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
-    <script>
-      const STORAGE_USER_KEY = "mercadoverde_current_user";
-      const LOGIN_ATTEMPTS_KEY = "mercadoverde_login_attempts";
-
-      // Base de datos con 3 usuarios. Comprobaciones de contraseña con SHA256
-      const users = {
-        admin: {
-          password: CryptoJS.SHA256("Admin123!").toString(),
-          role: "admin",
-        },
-        usuario: {
-          password: CryptoJS.SHA256("User123!").toString(),
-          role: "user",
-        },
-        familia: {
-          password: CryptoJS.SHA256("Fam123!").toString(),
-          role: "user",
-        },
-      };
-
-      let attempts = parseInt(localStorage.getItem("loginAttempts") || "0");
-      let blockedUntil = parseInt(localStorage.getItem("blockedUntil") || "0");
-      let showCaptcha = attempts >= 3;
-
-      window.onload = function () {
-        checkBlockStatus();
-        if (showCaptcha) {
-          document.getElementById("recaptchaContainer").classList.add("show");
-        }
-      };
-
-      function checkBlockStatus() {
-        const now = Date.now();
-        if (blockedUntil > now) {
-          startTimer(Math.ceil((blockedUntil - now) / 1000));
-        }
-      }
-
-      /**
-       * Función para validar contraseña
-       */
-      function validatePassword(password) {
-        if (password.length < 4) return false;
-        if (!/[a-z]/.test(password)) return false;
-        if (!/[A-Z]/.test(password)) return false;
-        if (!/[!@#$%^&*(),.?":{}|<>]/.test(password)) return false;
-        return true;
-      }
-
-      /**
-       * Cuando falla el usuario, almacena el intento para el admin
-       */
-      function logFailedAttempt(username, ip = "Unknown") {
-        const failedAttempts = JSON.parse(
-          localStorage.getItem(LOGIN_ATTEMPTS_KEY) || "[]",
-        );
-        failedAttempts.push({
-          username: username,
-          timestamp: new Date().toISOString(),
-          timestampLocal: new Date().toLocaleString("es-ES"),
-          ip: ip,
-          success: false,
-        });
-        localStorage.setItem(
-          LOGIN_ATTEMPTS_KEY,
-          JSON.stringify(failedAttempts),
-        );
-      }
-
-      /*Inicio de sesión exitoso*/
-      function logSuccessfulLogin(username, ip = "Unknown") {
-        const failedAttempts = JSON.parse(
-          localStorage.getItem(LOGIN_ATTEMPTS_KEY) || "[]",
-        );
-        failedAttempts.push({
-          username: username,
-          timestamp: new Date().toISOString(),
-          timestampLocal: new Date().toLocaleString("es-ES"),
-          ip: ip,
-          success: true,
-        });
-        localStorage.setItem(
-          LOGIN_ATTEMPTS_KEY,
-          JSON.stringify(failedAttempts),
-        );
-      }
-
-      document
-        .getElementById("loginForm")
-        .addEventListener("submit", function (e) {
-          e.preventDefault();
-
-          const now = Date.now();
-          if (blockedUntil > now) {
-            return;
-          }
-
-          const username = document.getElementById("username").value;
-          const password = document.getElementById("password").value;
-          const errorMsg = document.getElementById("errorMessage");
-
-          // Validar reCAPTCHA si está visible
-          if (showCaptcha) {
-            const captchaResponse = grecaptcha.getResponse();
-            if (!captchaResponse) {
-              errorMsg.textContent = "Por favor, completa el reCAPTCHA";
-              errorMsg.classList.add("show");
-              return;
-            }
-          }
-
-          if (!validatePassword(password)) {
-            errorMsg.textContent =
-              "La contraseña no cumple los requisitos de seguridad";
-            errorMsg.classList.add("show");
-            logFailedAttempt(username);
-            return;
-          }
-
-          const hashedPassword = CryptoJS.SHA256(password).toString();
-
-          if (users[username] && users[username].password === hashedPassword) {
-            // Login exitoso
-            localStorage.removeItem("loginAttempts");
-            localStorage.removeItem("blockedUntil");
-
-            sessionStorage.setItem("loggedUser", username);
-            sessionStorage.setItem("userRole", users[username].role);
-            localStorage.setItem(STORAGE_USER_KEY, username);
-
-            logSuccessfulLogin(username);
-
-            window.location.href = "dashboard.html";
-          } else {
-            attempts++;
-            localStorage.setItem("loginAttempts", attempts.toString());
-            logFailedAttempt(username);
-
-            // Mostrar reCAPTCHA después de 3 intentos
-            if (attempts >= 3) {
-              showCaptcha = true;
-              document
-                .getElementById("recaptchaContainer")
-                .classList.add("show");
-            }
-
-            if (attempts >= 5) {
-              blockedUntil = Date.now() + 30000;
-              localStorage.setItem("blockedUntil", blockedUntil.toString());
-              errorMsg.textContent =
-                "Demasiados intentos fallidos. Cuenta bloqueada.";
-              startTimer(30);
-            } else {
-              errorMsg.textContent = `Usuario o contraseña incorrectos. Intentos restantes: ${5 - attempts}`;
-            }
-            errorMsg.classList.add("show");
-          }
-        });
-
-      function startTimer(seconds) {
-        const loginBtn = document.getElementById("loginBtn");
-        const timerDiv = document.getElementById("timer");
-        loginBtn.disabled = true;
-        timerDiv.classList.add("show");
-
-        const interval = setInterval(() => {
-          timerDiv.textContent = `⏳ Bloqueado. Tiempo restante: ${seconds}s`;
-          seconds--;
-
-          if (seconds < 0) {
-            clearInterval(interval);
-            loginBtn.disabled = false;
-            timerDiv.classList.remove("show");
-            attempts = 0;
-            localStorage.setItem("loginAttempts", "0");
-            localStorage.removeItem("blockedUntil");
-          }
-        }, 1000);
-      }
-    </script>
+      </main>
+      <footer>
+        <p>🌱 2025 MercadoVerde - Compra consciente, vida sostenible 🌱</p>
+      </footer>
+    </body>
   </body>
 </html>
