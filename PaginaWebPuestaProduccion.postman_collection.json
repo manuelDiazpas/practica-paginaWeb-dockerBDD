@@ -199,6 +199,353 @@
         }
       },
       "response": []
+    },
+    {
+      "name": "AñadirProductosEnLaLista",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "// 1. La respuesta es 200 porque Flask redirige y sigue al dashboard\r",
+              "pm.test(\"Status 200 tras añadir producto\", function () {\r",
+              "    pm.response.to.have.status(200);\r",
+              "});\r",
+              "\r",
+              "// 2. Estamos en el dashboard, no en login\r",
+              "pm.test(\"Redirige al Dashboard correctamente\", function () {\r",
+              "    pm.expect(pm.response.text()).to.include(\"Mi Lista de Compra\");\r",
+              "});\r",
+              "\r",
+              "// 3. El mensaje flash de éxito aparece\r",
+              "pm.test(\"Mensaje de confirmación de producto añadido\", function () {\r",
+              "    pm.expect(pm.response.text()).to.include(\"añadido correctamente\");\r",
+              "});\r",
+              "\r",
+              "// 4. El panel de acciones sigue disponible\r",
+              "pm.test(\"El formulario de añadir sigue presente\", function () {\r",
+              "    pm.expect(pm.response.text()).to.include(\"Añadir a la lista\");\r",
+              "});\r",
+              "\r",
+              "// 5. Guardar el HTML para debug\r",
+              "console.log(\"Respuesta añadir:\", pm.response.text().substring(0, 500));"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "urlencoded",
+          "urlencoded": [
+            {
+              "key": "id_producto",
+              "value": "1",
+              "type": "text",
+              "uuid": "52529dae-be86-434d-9b2f-89f082fc7507"
+            },
+            {
+              "key": "cantidad",
+              "value": "3",
+              "type": "text",
+              "uuid": "c54a7c27-60d6-42d8-9a57-910e67b692e5"
+            }
+          ]
+        },
+        "url": {
+          "raw": "http://127.0.0.1:5000/add_product",
+          "protocol": "http",
+          "host": [
+            "127",
+            "0",
+            "0",
+            "1"
+          ],
+          "port": "5000",
+          "path": [
+            "add_product"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Añadir0ProductosEnLaLista",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status 200 - La app responde sin crashear\", function () {\r",
+              "    pm.response.to.have.status(200);\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Seguridad: No se permite cantidad 0\", function () {\r",
+              "    var body = pm.response.text();\r",
+              "    // No debe aparecer confirmación de éxito\r",
+              "    pm.expect(body).to.not.include(\"añadido correctamente\");\r",
+              "});\r",
+              "\r",
+              "pm.test(\"La app sigue mostrando el Dashboard (no crashea)\", function () {\r",
+              "    pm.expect(pm.response.text()).to.include(\"Mi Lista de Compra\");\r",
+              "});\r",
+              "\r",
+              "console.log(\"Respuesta cantidad 0:\", pm.response.text().substring(0, 800));"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "urlencoded",
+          "urlencoded": [
+            {
+              "key": "id_producto",
+              "value": "1",
+              "type": "text",
+              "uuid": "52529dae-be86-434d-9b2f-89f082fc7507"
+            },
+            {
+              "key": "cantidad",
+              "value": "0",
+              "type": "text",
+              "uuid": "d85d48a2-4b03-4441-8f30-93868d107fdb"
+            }
+          ]
+        },
+        "url": {
+          "raw": "http://127.0.0.1:5000/add_product",
+          "protocol": "http",
+          "host": [
+            "127",
+            "0",
+            "0",
+            "1"
+          ],
+          "port": "5000",
+          "path": [
+            "add_product"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "AñadirProductosNegativosEnLaLista Copy",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status 200 - La app responde sin crashear\", function () {\r",
+              "    pm.response.to.have.status(200);\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Seguridad: No se permite cantidad menor que 0\", function () {\r",
+              "    var body = pm.response.text();\r",
+              "    // No debe aparecer confirmación de éxito\r",
+              "    pm.expect(body).to.not.include(\"añadido correctamente\");\r",
+              "});\r",
+              "\r",
+              "pm.test(\"La app sigue mostrando el Dashboard (no crashea)\", function () {\r",
+              "    pm.expect(pm.response.text()).to.include(\"Mi Lista de Compra\");\r",
+              "});\r",
+              "\r",
+              "console.log(\"Respuesta cantidad 0:\", pm.response.text().substring(0, 800));"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "urlencoded",
+          "urlencoded": [
+            {
+              "key": "id_producto",
+              "value": "0",
+              "type": "text",
+              "uuid": "52529dae-be86-434d-9b2f-89f082fc7507"
+            },
+            {
+              "key": "cantidad",
+              "value": "-8",
+              "type": "text",
+              "uuid": "d85d48a2-4b03-4441-8f30-93868d107fdb"
+            }
+          ]
+        },
+        "url": {
+          "raw": "http://127.0.0.1:5000/add_product",
+          "protocol": "http",
+          "host": [
+            "127",
+            "0",
+            "0",
+            "1"
+          ],
+          "port": "5000",
+          "path": [
+            "add_product"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "BorradoProductosLista",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "// 1. Status 200 tras eliminar\r",
+              "pm.test(\"Status 200 tras eliminar producto\", function () {\r",
+              "    pm.response.to.have.status(200);\r",
+              "});\r",
+              "\r",
+              "// 2. Seguimos en el dashboard\r",
+              "pm.test(\"Redirige al Dashboard correctamente\", function () {\r",
+              "    pm.expect(pm.response.text()).to.include(\"Mi Lista de Compra\");\r",
+              "});\r",
+              "\r",
+              "// 3. Mensaje flash de eliminación\r",
+              "pm.test(\"Mensaje de confirmación de eliminación\", function () {\r",
+              "    pm.expect(pm.response.text()).to.include(\"ids_lista\");\r",
+              "});\r",
+              "\r",
+              "// 5. No hay error de servidor en la respuesta\r",
+              "pm.test(\"Sin errores de servidor en la respuesta\", function () {\r",
+              "    pm.expect(pm.response.text()).to.not.include(\"DatabaseError\");\r",
+              "    pm.expect(pm.response.text()).to.not.include(\"Traceback\");\r",
+              "});\r",
+              "\r",
+              "console.log(\"Respuesta eliminar:\", pm.response.text().substring(0, 500));"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "urlencoded",
+          "urlencoded": [
+            {
+              "key": "id_producto",
+              "value": "1",
+              "type": "text",
+              "uuid": "52529dae-be86-434d-9b2f-89f082fc7507"
+            }
+          ]
+        },
+        "url": {
+          "raw": "http://127.0.0.1:5000/delete_products",
+          "protocol": "http",
+          "host": [
+            "127",
+            "0",
+            "0",
+            "1"
+          ],
+          "port": "5000",
+          "path": [
+            "delete_products"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "BorradoProductosMultiplesLista",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "// 1. Status 200 tras eliminar\r",
+              "pm.test(\"Status 200 tras eliminar producto\", function () {\r",
+              "    pm.response.to.have.status(200);\r",
+              "});\r",
+              "\r",
+              "// 2. Seguimos en el dashboard\r",
+              "pm.test(\"Redirige al Dashboard correctamente\", function () {\r",
+              "    pm.expect(pm.response.text()).to.include(\"Mi Lista de Compra\");\r",
+              "});\r",
+              "\r",
+              "// 3. El mensaje indica que se han borrado varios\r",
+              "pm.test(\"Confirmación de eliminación múltiple\", function () {\r",
+              "    var body = pm.response.text();\r",
+              "    // Flask manda \"X producto(s) eliminado(s)\"\r",
+              "    pm.expect(body).to.include(\"ids_lista\");\r",
+              "});\r",
+              "\r",
+              "// 4. No hay error de servidor en la respuesta\r",
+              "pm.test(\"Sin errores de servidor en la respuesta\", function () {\r",
+              "    pm.expect(pm.response.text()).to.not.include(\"DatabaseError\");\r",
+              "    pm.expect(pm.response.text()).to.not.include(\"Traceback\");\r",
+              "});\r",
+              "\r",
+              "console.log(\"Respuesta eliminar:\", pm.response.text().substring(0, 500));"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "urlencoded",
+          "urlencoded": [
+            {
+              "key": "id_producto",
+              "value": "1",
+              "type": "text",
+              "uuid": "52529dae-be86-434d-9b2f-89f082fc7507"
+            },
+            {
+              "key": "id_producto",
+              "value": "2",
+              "type": "text",
+              "uuid": "17e5d796-7557-40b4-a1ae-0f392fb3d9f3"
+            }
+          ]
+        },
+        "url": {
+          "raw": "http://127.0.0.1:5000/delete_products",
+          "protocol": "http",
+          "host": [
+            "127",
+            "0",
+            "0",
+            "1"
+          ],
+          "port": "5000",
+          "path": [
+            "delete_products"
+          ]
+        }
+      },
+      "response": []
     }
   ]
 }
