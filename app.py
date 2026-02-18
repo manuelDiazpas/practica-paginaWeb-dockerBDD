@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, redirect, url_for, session, f
 import mysql.connector
 
 app = Flask(__name__)
+app.secret_key = 'claveSecreta' #¡¡No eliminar!! Sirve para pruebas Flasks
 
 # Configuración de la base de datos (Docker)
 db_config = {
