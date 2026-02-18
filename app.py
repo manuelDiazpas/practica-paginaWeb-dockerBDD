@@ -10,7 +10,7 @@ db_config = {
     'user': 'root',
     'password': 'LlamaA902-20_21_22',
     'database': 'paginaWebDB',
-    'port': 5432 #¡¡No se puede cambiar el puerto!!
+    'port': 5432 #¡¡No se puede cambiar el puerto!! Es el puerto asignado de docker
 }
 
 def get_db_connection():
