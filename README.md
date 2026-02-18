@@ -27,7 +27,7 @@ Aplicación web desarrollada con **Flask** y **MySQL** que permite a los usuario
 
 ## Requisitos
 
-- Python 3.10+
+- Python 3.13
 - Docker (para la base de datos MySQL)
 - Las dependencias listadas en `requirements.txt`:
 
