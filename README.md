@@ -46,22 +46,86 @@ pip install -r requirements.txt
 
 ## Instalación y Arranque
 
-**1. Levantar el contenedor Docker con MySQL:**
+El proyecto utiliza **tres contenedores Docker** conectados entre sí a través de la red `mi-red-lista-compra`:
+
+| Contenedor              | Imagen                   | Puerto externo → interno | Descripción                   |
+| ----------------------- | ------------------------ | ------------------------ | ----------------------------- |
+| `flask-app`             | `flask-lista-cor:latest` | `5000:5000`              | Aplicación Flask              |
+| `mysql-contenedor`      | `mysql:latest`           | `5432:3306`              | Base de datos MySQL           |
+| `contenedor-phpmyadmin` | `phpmyadmin:latest`      | `8080:80`                | Panel de administración de BD |
+
+> ⚠️ El puerto externo de MySQL es el **5432** (mapeado al 3306 interno). Por eso en `app.py` el puerto está configurado como `5432` y **no debe modificarse**.
+
+---
+
+**1. Crear la red compartida** (solo la primera vez):
 
 ```bash
-docker build -t mercadoverde-db .
-docker run -d -p 5432:3306 --name mercadoverde mercadoverde-db
+docker network create mi-red-lista-compra
 ```
 
-> El puerto expuesto hacia el exterior es el **5432**, aunque internamente MySQL corre en el 3306. Este valor está configurado en `app.py` y **no debe modificarse** sin actualizar también el `docker-compose` o el comando `docker run`.
-
-**2. Arrancar la aplicación Flask:**
+**2. Levantar el contenedor MySQL:**
 
 ```bash
-python app.py
+docker run -d \
+  --name mysql-contenedor \
+  --network mi-red-lista-compra \
+  -p 5432:3306 \
+  -e MYSQL_ROOT_PASSWORD=LlamaA902-20_21_22 \
+  -e MYSQL_DATABASE=paginaWebDB \
+  mysql:latest
 ```
+
+**3. Levantar phpMyAdmin** (opcional, para administrar la BD visualmente):
+
+```bash
+docker run -d \
+  --name contenedor-phpmyadmin \
+  --network mi-red-lista-compra \
+  -p 8080:80 \
+  -e PMA_HOST=mysql-contenedor \
+  phpmyadmin:latest
+```
+
+phpMyAdmin estará disponible en: `http://127.0.0.1:8080`
+
+**4. Construir y levantar la aplicación Flask:**
+
+```bash
+docker build -t flask-lista-cor .
+
+docker run -d \
+  --name flask-app \
+  --network mi-red-lista-compra \
+  -p 5000:5000 \
+  flask-lista-cor:latest
+```
+
+**5. Verificar que los tres contenedores están corriendo:**
+
+```bash
+docker ps
+```
+
+Deberías ver `flask-app`, `mysql-contenedor` y `contenedor-phpmyadmin` con estado activo.
 
 La app estará disponible en: `http://127.0.0.1:5000`
+
+---
+
+**Para arrancar contenedores ya existentes** (si ya los creaste antes):
+
+```bash
+docker start mysql-contenedor
+docker start contenedor-phpmyadmin
+docker start flask-app
+```
+
+**Para detenerlos:**
+
+```bash
+docker stop flask-app contenedor-phpmyadmin mysql-contenedor
+```
 
 ---
 
