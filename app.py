@@ -2,7 +2,6 @@ from flask import Flask, render_template, request, redirect, url_for, session, f
 import mysql.connector
 
 app = Flask(__name__)
-app.secret_key = 'tu_clave_secreta_aqui'
 
 # Configuración de la base de datos (Docker)
 db_config = {
@@ -13,23 +12,27 @@ db_config = {
     'port': 5432 #¡¡No se puede cambiar el puerto!! Es el puerto asignado de docker
 }
 
+#Metodo para conectar a la base de datos
 def get_db_connection():
     return mysql.connector.connect(**db_config)
 
+#Dirección principal de pagina web
 @app.route('/')
 def main():
     if 'user_id' in session:
-        return redirect(url_for('dashboard'))
+        return redirect(url_for('dashboard')) #Si está logueado, le lleva a la lista personal del usuario
     return render_template('main.html')
 
+#Dirección y metodo para inicio de sesión de la pagina
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    #Al ser un post, pide el nombre y la contraseña del usuario
     if request.method == 'POST':
         user_input = request.form.get('username')
         pass_input = request.form.get('password')
 
         conn = get_db_connection()
-        cursor = conn.cursor(dictionary=True)
+        cursor = conn.cursor(dictionary=True) #Maneja las consultas a la base de datos
         cursor.execute(
             "SELECT * FROM Usuario WHERE nombreUsuario = %s AND contrasenyaUsuario = %s",
             (user_input, pass_input)
@@ -38,6 +41,7 @@ def login():
         cursor.close()
         conn.close()
 
+        #Si coincide, inicia sesión. Si no, muestra error.
         if user:
             session['user_id'] = user['ID_USUARIO']
             session['username'] = user['nombreUsuario']
@@ -48,9 +52,11 @@ def login():
 
     return render_template('login.html')
 
+#Dirección para el dashboard
 @app.route('/dashboard')
 def dashboard():
-    if 'user_id' not in session:
+    #Si no hay nadie logueado, vuelve atras
+    if 'user_id' not in session: 
         return redirect(url_for('login'))
 
     conn = get_db_connection()
@@ -157,5 +163,6 @@ def logout():
     session.clear()
     return redirect(url_for('main'))
 
+#Metodo para debuguear si es __main__ el nombre
 if __name__ == '__main__':
     app.run(debug=True)
