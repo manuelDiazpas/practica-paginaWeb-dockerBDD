@@ -107,11 +107,12 @@ def add_product():
         existing = cursor.fetchone()
 
         if existing:
+            if cantidad >0 and cantidad < 1000:
             # Actualizar cantidad
-            cursor.execute(
-                "UPDATE ListaDeLaCompra SET cantidad = cantidad + %s WHERE ID_USUARIO = %s AND ID_PRODUCTO = %s",
-                (cantidad, session['user_id'], id_producto)
-            )
+                cursor.execute(
+                    "UPDATE ListaDeLaCompra SET cantidad = cantidad + %s WHERE ID_USUARIO = %s AND ID_PRODUCTO = %s",
+                    (cantidad, session['user_id'], id_producto)
+                )
         else:
             # Insertar nuevo
             cursor.execute(
