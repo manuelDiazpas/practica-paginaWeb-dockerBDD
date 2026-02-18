@@ -1,0 +1,204 @@
+{
+  "info": {
+    "_postman_id": "587c9fb8-53b2-4157-9779-20441e62a5e9",
+    "name": "PaginaWebPuestaProduccion",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "27261039"
+  },
+  "item": [
+    {
+      "name": "FuncionaLaPagina",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://127.0.0.1:5000/",
+          "protocol": "http",
+          "host": [
+            "127",
+            "0",
+            "0",
+            "1"
+          ],
+          "port": "5000",
+          "path": [
+            ""
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "IntentoCorrectoLogin",
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "exec": [
+              "// Limpia las cookies para asegurar que cada intento de login sea 'fresco'\r",
+              "pm.cookies.clear();"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "// 1. Ver qué está pasando realmente (Mira la consola de Postman con Ctrl+Alt+C)\r",
+              "console.log(\"Contenido recibido:\", pm.response.text());\r",
+              "\r",
+              "pm.test(\"Estado de respuesta es 200\", function () {\r",
+              "    pm.response.to.have.status(200);\r",
+              "});\r",
+              "\r",
+              "// 2. Comprobar si estamos en el Dashboard o seguimos en el Login\r",
+              "pm.test(\"¿Estamos en el Dashboard?\", function () {\r",
+              "    var body = pm.response.text();\r",
+              "    // Comprobamos si el HTML contiene el título del Dashboard\r",
+              "    // Si falla aquí, es que el login ha fallado en el servidor\r",
+              "    pm.expect(body).to.include(\"Mi Lista de Compra\");\r",
+              "});\r",
+              "\r",
+              "// 3. Comprobar el usuario\r",
+              "pm.test(\"¿Aparece Rigoberto23 en el HTML?\", function () {\r",
+              "    var body = pm.response.text();\r",
+              "    pm.expect(body).to.include(\"Rigoberto23\");\r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "urlencoded",
+          "urlencoded": [
+            {
+              "key": "username",
+              "value": "Rigoberto23",
+              "type": "text",
+              "uuid": "ef270351-4ef6-48b1-8eb8-18ff82377aa9"
+            },
+            {
+              "key": "password",
+              "value": "R1g0bert023",
+              "type": "text",
+              "uuid": "c50558ee-a923-4672-9d3e-3a0785e9bf24"
+            }
+          ]
+        },
+        "url": {
+          "raw": "http://127.0.0.1:5000/login",
+          "protocol": "http",
+          "host": [
+            "127",
+            "0",
+            "0",
+            "1"
+          ],
+          "port": "5000",
+          "path": [
+            "login"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "IntentoFallidoLogin",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "// 1. El código es 200 porque Flask nos devuelve a la página de login\r",
+              "pm.test(\"Status code is 200 (Login recargado)\", function () {\r",
+              "    pm.response.to.have.status(200);\r",
+              "});\r",
+              "\r",
+              "// 2. Verificar que NO entramos al Dashboard y seguimos en Login\r",
+              "pm.test(\"Seguridad: El usuario permanece en la página de acceso\", function () {\r",
+              "    var responseBody = pm.response.text();\r",
+              "    pm.expect(responseBody).to.include(\"Iniciar Sesión\");\r",
+              "    pm.expect(responseBody).to.not.include(\"products-grid\");\r",
+              "});\r",
+              "\r",
+              "// 3. Verificar que aparece el mensaje de error de tu app.py\r",
+              "pm.test(\"Seguridad: Se muestra el mensaje de error de Flask\", function () {\r",
+              "    pm.expect(pm.response.text()).to.include(\"Usuario o contraseña incorrectos\");\r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "urlencoded",
+          "urlencoded": [
+            {
+              "key": "username",
+              "value": "admin",
+              "type": "text",
+              "uuid": "ef270351-4ef6-48b1-8eb8-18ff82377aa9"
+            },
+            {
+              "key": "password",
+              "value": "contrasenyaMala",
+              "type": "text",
+              "uuid": "c50558ee-a923-4672-9d3e-3a0785e9bf24"
+            }
+          ]
+        },
+        "url": {
+          "raw": "http://127.0.0.1:5000/login",
+          "protocol": "http",
+          "host": [
+            "127",
+            "0",
+            "0",
+            "1"
+          ],
+          "port": "5000",
+          "path": [
+            "login"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "DirecciónListaCompra",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://127.0.0.1:5000/dashboard",
+          "protocol": "http",
+          "host": [
+            "127",
+            "0",
+            "0",
+            "1"
+          ],
+          "port": "5000",
+          "path": [
+            "dashboard"
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}
