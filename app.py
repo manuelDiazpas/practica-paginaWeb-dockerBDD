@@ -89,7 +89,20 @@ def add_product():
         return jsonify({'success': False, 'error': 'No autenticado'}), 401
 
     id_producto = request.form.get('id_producto')
-    cantidad = request.form.get('cantidad', 1)
+
+    cantidad_raw = request.form.get('cantidad', '').strip()
+
+    # No es un número entero (ej: "abc", "3.5")
+    try:
+        cantidad = int(cantidad_raw)
+    except ValueError:
+        flash(f'{(ValueError)} → La cantidad debe ser un número entero válido.')
+        return redirect(url_for('dashboard'))
+
+    # Es un número pero es 0 o negativo
+    if cantidad <= 0:
+        flash('⚠️ La cantidad debe ser mayor que cero. No se pueden añadir 0 o menos productos.')
+        return redirect(url_for('dashboard'))
 
     if not id_producto:
         flash('Debes seleccionar un producto.')
@@ -107,14 +120,13 @@ def add_product():
         existing = cursor.fetchone()
 
         if existing:
-            if cantidad >0 and cantidad < 1000:
-            # Actualizar cantidad
-                cursor.execute(
-                    "UPDATE ListaDeLaCompra SET cantidad = cantidad + %s WHERE ID_USUARIO = %s AND ID_PRODUCTO = %s",
-                    (cantidad, session['user_id'], id_producto)
-                )
+            # Actualizar cantidad sumando la nueva
+            cursor.execute(
+                "UPDATE ListaDeLaCompra SET cantidad = cantidad + %s WHERE ID_USUARIO = %s AND ID_PRODUCTO = %s",
+                (cantidad, session['user_id'], id_producto)
+            )
         else:
-            # Insertar nuevo
+            # Insertar nuevo registro
             cursor.execute(
                 "INSERT INTO ListaDeLaCompra (ID_USUARIO, ID_PRODUCTO, cantidad) VALUES (%s, %s, %s)",
                 (session['user_id'], id_producto, cantidad)
