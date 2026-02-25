@@ -292,16 +292,22 @@ Destruye completamente la sesión del usuario con `session.clear()` y redirige a
 
 La aplicación implementa varias medidas de seguridad alineadas con la guía **OWASP Top 10**:
 
-**Control de acceso (OWASP A01):** todas las rutas que gestionan datos comprueban que existe una sesión activa antes de ejecutar cualquier operación. Las operaciones de escritura en BD filtran siempre por el `ID_USUARIO` de la sesión, impidiendo que un usuario acceda o modifique datos de otro.
+**Control de acceso (OWASP A01):** todas las rutas que gestionan datos comprueban que existe una sesión activa antes de ejecutar cualquier operación.
+Las operaciones de escritura en BD filtran siempre por el `ID_USUARIO` de la sesión, impidiendo el [acceso sin autorización](https://cwe.mitre.org/data/definitions/862.html).
 
-**Prevención de inyección SQL (OWASP A05):** todas las consultas a la base de datos utilizan **parámetros preparados** (`%s`), nunca concatenación de strings. Esto elimina la posibilidad de inyección SQL independientemente del input del usuario.
+**Prevención de inyección SQL (OWASP A05):** todas las consultas a la base de datos utilizan **parámetros preparados** (`%s`), nunca concatenación de strings.
+Esto elimina la posibilidad de [Inyección SQL](https://cwe.mitre.org/data/definitions/89.html) independientemente del input del usuario.
 
-**Gestión de sesión y autenticación (OWASP A07):** las sesiones se gestionan mediante la librería de sesiones seguras de Flask, protegidas con una `secret_key`. El logout destruye la sesión por completo con `session.clear()`.
-Además, se ha implementado un limite de intentos, para cubrir el uso de la[Fuerza Bruta](https://cwe.mitre.org/data/definitions/307.html).
+**Gestión de sesión y autenticación (OWASP A07):** las sesiones se gestionan mediante la librería de sesiones seguras de Flask, protegidas con una `secret_key`.
+El logout destruye la sesión por completo con `session.clear()`.
+Además, se ha implementado un limite de intentos, para cubrir el uso de [Fuerza Bruta](https://cwe.mitre.org/data/definitions/307.html).
 
-**Manejo de errores (OWASP A04):** los bloques `try/except` en las rutas de escritura capturan excepciones de base de datos y muestran mensajes genéricos al usuario, sin exponer trazas de pila ni detalles internos del sistema.
+**Manejo de errores (OWASP A04):** los bloques `try/except` en las rutas de escritura capturan excepciones de base de datos y muestran mensajes genéricos al usuario,
+sin exponer trazas de pila ni detalles internos del sistema. Asegurando que se [comprueben los valores antes de su uso](https://cwe.mitre.org/data/definitions/319.html).
 
-**Modo debug controlado (OWASP A06):** el modo `debug=True` de Flask solo se activa cuando el script se ejecuta directamente (`if __name__ == '__main__'`), no cuando se despliega a través de un servidor WSGI en producción. Esto permite que durante el desarrollo, se pueda detectar de mejor forma los errores con un lanzamiento más meticuloso.
+**Modo debug controlado (OWASP A06):** el modo `debug=True` de Flask solo se activa cuando el script se ejecuta directamente (`if __name__ == '__main__'`),
+no cuando se despliega a través de un [servidor en producción](https://cwe.mitre.org/data/definitions/602.html).
+Esto permite que se pueda detectar de mejor forma los [errores](https://cwe.mitre.org/data/definitions/501.html) con un lanzamiento más meticuloso.
 
 ---
 
