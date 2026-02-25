@@ -246,6 +246,7 @@ Panel principal accesible únicamente por usuarios autenticados. Si se intenta a
 
 **Ruta:** `POST /add_product`
 
+Una de las funciones de la lista.
 Desde la columna derecha del dashboard, el usuario selecciona un producto del catálogo completo (ordenado alfabéticamente) e indica la cantidad. Flask aplica la siguiente lógica:
 
 - **Si el producto ya está en la lista:** se suma la cantidad indicada a la existente, evitando duplicados.
