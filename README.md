@@ -297,7 +297,7 @@ La aplicación implementa varias medidas de seguridad alineadas con la guía **O
 **Prevención de inyección SQL (OWASP A05):** todas las consultas a la base de datos utilizan **parámetros preparados** (`%s`), nunca concatenación de strings. Esto elimina la posibilidad de inyección SQL independientemente del input del usuario.
 
 **Gestión de sesión y autenticación (OWASP A07):** las sesiones se gestionan mediante la librería de sesiones seguras de Flask, protegidas con una `secret_key`. El logout destruye la sesión por completo con `session.clear()`.
-Además, se ha implementado un limite de intentos, el cual al superar, obliga al usuario a esperar un tiempo determinado para volver a intentar inciar sesión.
+Además, se ha implementado un limite de intentos, para cubrir el uso de la[Fuerza Bruta](https://cwe.mitre.org/data/definitions/307.html).
 
 **Manejo de errores (OWASP A04):** los bloques `try/except` en las rutas de escritura capturan excepciones de base de datos y muestran mensajes genéricos al usuario, sin exponer trazas de pila ni detalles internos del sistema.
 
