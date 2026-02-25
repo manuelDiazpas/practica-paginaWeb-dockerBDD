@@ -22,15 +22,15 @@
 
 ## 🛠️ Tecnologías utilizadas
 
-| Capa | Tecnología |
-|---|---|
-| Backend | Python 3.13 + Flask |
-| Base de datos | MySQL 8 |
-| Administración BD | phpMyAdmin |
-| Contenedores | Docker |
-| Frontend | HTML5 + CSS3 + JavaScript vanilla |
-| CI/CD | GitHub Actions |
-| Testing | Postman |
+| Capa              | Tecnología                        |
+| ----------------- | --------------------------------- |
+| Backend           | Python 3.13 + Flask               |
+| Base de datos     | MySQL 8                           |
+| Administración BD | phpMyAdmin                        |
+| Contenedores      | Docker                            |
+| Frontend          | HTML5 + CSS3 + JavaScript vanilla |
+| CI/CD             | GitHub Actions                    |
+| Testing           | Postman                           |
 
 ---
 
@@ -84,11 +84,11 @@ pip install -r requirements.txt
 
 El proyecto utiliza **tres contenedores Docker** conectados entre sí a través de la red `mi-red-lista-compra`:
 
-| Contenedor | Imagen | Puerto externo → interno | Descripción |
-|---|---|---|---|
-| `flask-app` | `flask-lista-cor:latest` | `5000:5000` | Aplicación Flask |
-| `mysql-contenedor` | `mysql:latest` | `5432:3306` | Base de datos MySQL |
-| `contenedor-phpmyadmin` | `phpmyadmin:latest` | `8080:80` | Panel de administración de BD |
+| Contenedor              | Imagen                   | Puerto externo → interno | Descripción                   |
+| ----------------------- | ------------------------ | ------------------------ | ----------------------------- |
+| `flask-app`             | `flask-lista-cor:latest` | `5000:5000`              | Aplicación Flask              |
+| `mysql-contenedor`      | `mysql:latest`           | `5432:3306`              | Base de datos MySQL           |
+| `contenedor-phpmyadmin` | `phpmyadmin:latest`      | `8080:80`                | Panel de administración de BD |
 
 > ⚠️ El puerto externo de MySQL es el **5432** (mapeado al 3306 interno). Por eso en `app.py` el puerto está configurado como `5432` y **no debe modificarse**.
 
@@ -275,15 +275,15 @@ Destruye completamente la sesión del usuario con `session.clear()` y redirige a
 
 ## 🔗 Rutas de la API Flask
 
-| Método | Ruta | Acceso | Descripción |
-|---|---|---|---|
-| GET | `/` | Público | Página de bienvenida |
-| GET | `/login` | Público | Muestra el formulario de login |
-| POST | `/login` | Público | Procesa las credenciales e inicia sesión |
-| GET | `/dashboard` | Autenticado | Muestra la lista de compra del usuario |
-| POST | `/add_product` | Autenticado | Añade un producto a la lista del usuario |
-| POST | `/delete_products` | Autenticado | Elimina los productos seleccionados de la lista |
-| GET | `/logout` | Autenticado | Cierra la sesión y redirige al inicio |
+| Método | Ruta               | Acceso      | Descripción                                     |
+| ------ | ------------------ | ----------- | ----------------------------------------------- |
+| GET    | `/`                | Público     | Página de bienvenida                            |
+| GET    | `/login`           | Público     | Muestra el formulario de login                  |
+| POST   | `/login`           | Público     | Procesa las credenciales e inicia sesión        |
+| GET    | `/dashboard`       | Autenticado | Muestra la lista de compra del usuario          |
+| POST   | `/add_product`     | Autenticado | Añade un producto a la lista del usuario        |
+| POST   | `/delete_products` | Autenticado | Elimina los productos seleccionados de la lista |
+| GET    | `/logout`          | Autenticado | Cierra la sesión y redirige al inicio           |
 
 ---
 
@@ -317,6 +317,7 @@ En todas las peticiones (excepto pruebas de acceso sin sesión) deben estar acti
 ---
 
 ### Petición 1 — `FuncionaLaPagina`
+
 `GET http://127.0.0.1:5000/`
 
 Prueba de humo básica que comprueba que la aplicación está levantada y responde en la ruta raíz. Si esta petición falla, el resto no tiene sentido ejecutarlas.
@@ -324,6 +325,7 @@ Prueba de humo básica que comprueba que la aplicación está levantada y respon
 ---
 
 ### Petición 2 — `IntentoCorrectoLogin`
+
 `POST http://127.0.0.1:5000/login`
 
 ```
@@ -340,6 +342,7 @@ Incluye un **pre-request script** que limpia las cookies antes de cada ejecució
 ---
 
 ### Petición 3 — `IntentoFallidoLogin`
+
 `POST http://127.0.0.1:5000/login`
 
 ```
@@ -356,6 +359,7 @@ Verifica tres condiciones de seguridad ante credenciales incorrectas:
 ---
 
 ### Petición 4 — `DirecciónListaCompra`
+
 `GET http://127.0.0.1:5000/dashboard`
 
 Acceso directo a la ruta del dashboard. Con la sesión activa establecida por el login correcto previo, verifica que el dashboard carga correctamente sin redirigir al login.
@@ -363,6 +367,7 @@ Acceso directo a la ruta del dashboard. Con la sesión activa establecida por el
 ---
 
 ### Petición 5 — `AñadirProductosEnLaLista`
+
 `POST http://127.0.0.1:5000/add_product`
 
 ```
@@ -380,6 +385,7 @@ Verifica cuatro condiciones tras añadir un producto con datos válidos:
 ---
 
 ### Petición 6 — `Añadir0ProductosEnLaLista`
+
 `POST http://127.0.0.1:5000/add_product`
 
 ```
@@ -396,6 +402,7 @@ Prueba de validación con cantidad igual a cero. Verifica que:
 ---
 
 ### Petición 7 — `AñadirProductosNegativosEnLaLista`
+
 `POST http://127.0.0.1:5000/add_product`
 
 ```
@@ -408,6 +415,7 @@ Prueba de validación con cantidad negativa. Verifica las mismas tres condicione
 ---
 
 ### Petición 8 — `BorradoProductosLista`
+
 `POST http://127.0.0.1:5000/delete_products`
 
 ```
@@ -423,6 +431,7 @@ Verifica el borrado de un único producto. Comprueba que:
 ---
 
 ### Petición 9 — `BorradoProductosMultiplesLista`
+
 `POST http://127.0.0.1:5000/delete_products`
 
 ```
@@ -452,7 +461,7 @@ Verifica el borrado de múltiples productos en una sola petición, enviando el m
 
 ## ⚙️ Integración Continua con GitHub Actions
 
-El proyecto está integrado con **GitHub Actions** mediante un pipeline de CI definido en `.github/workflows/ci.yml`. Cada vez que se realiza un `push` o se abre un `pull request` sobre la rama `main`, GitHub ejecuta automáticamente los siguientes jobs en cadena:
+El proyecto está integrado con **GitHub Actions** mediante un pipeline de CI definido en `.github/workflows/ci.yml`. Cada vez que se realiza un `push` o se abre un `pull request` sobre la rama `main`, GitHub ejecuta automáticamente los siguientes trabajos en cadena:
 
 ```
 ✅ build  ──►  ✅ lint
@@ -460,11 +469,11 @@ El proyecto está integrado con **GitHub Actions** mediante un pipeline de CI de
                     └──►  ✅ docker
 ```
 
-Cada job depende del anterior mediante el atributo `needs`, de forma que si uno falla los siguientes no se ejecutan, ahorrando tiempo y recursos.
+Cada sección depende del anterior mediante el atributo `needs`, de forma que si uno falla los siguientes no se ejecutan, ahorrando tiempo y recursos.
 
 ---
 
-### Jobs del pipeline
+### Secciones del pipeline
 
 **`build` — Instalar dependencias**
 
@@ -492,8 +501,8 @@ Los resultados de cada ejecución del pipeline están disponibles en la pestaña
 https://github.com/manuelDiazpas/practica-paginaWeb-dockerBD/actions
 ```
 
-Cada job muestra un log detallado de su ejecución. Si alguno falla aparece una ❌ con el error exacto que lo ha provocado, permitiendo identificar y corregir el problema antes de que llegue a producción.
+Cada apartado muestra un log detallado de su ejecución. Si alguno falla aparece una ❌ con el error exacto que lo ha provocado, permitiendo identificar y corregir el problema antes de que llegue a producción. Esto, no se tiene en cuenta con el primero que aparece, puesto que fue comenzado en una rama ajena al `main`
 
 ---
 
-*🌱 2025 MercadoVerde — Compra consciente, vida sostenible 🌱*
+_🌱 2025 MercadoVerde — Compra consciente, vida sostenible 🌱_
