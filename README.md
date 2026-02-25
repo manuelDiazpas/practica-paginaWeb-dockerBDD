@@ -41,19 +41,19 @@ La aplicación sigue una arquitectura de **tres capas** desplegada completamente
 ```
 ┌─────────────────────────────────────────────────────┐
 │                   Red Docker                        │
-│              mi-red-lista-compra                    │
+│               mi-red-lista-compra                   │
 │                                                     │
-│  ┌──────────────┐    ┌─────────────────────────┐   │
-│  │  flask-app   │    │    mysql-contenedor      │   │
-│  │  :5000       │───►│    :5432 → 3306          │   │
-│  │  (Frontend   │    │    (Base de datos)       │   │
-│  │  + Backend)  │    └─────────────────────────┘   │
+│  ┌──────────────┐    ┌─────────────────────────┐    │
+│  │  flask-app   │    │    mysql-contenedor     │    │
+│  │  :5000       │───►│    :5432 → 3306         │    │
+│  │  (Frontend   │    │    (Base de datos)      │    │
+│  │  + Backend)  │    └─────────────────────────┘    │
 │  └──────────────┘                                   │
-│                      ┌─────────────────────────┐   │
-│                      │  contenedor-phpmyadmin  │   │
-│                      │  :8080 → 80             │   │
-│                      │  (Admin panel)          │   │
-│                      └─────────────────────────┘   │
+│                      ┌─────────────────────────┐    │
+│                      │  contenedor-phpmyadmin  │    │
+│                      │  :8080 → 80             │    │
+│                      │  (Admin panel)          │    │
+│                      └─────────────────────────┘    │
 └─────────────────────────────────────────────────────┘
 ```
 
@@ -465,7 +465,7 @@ El proyecto está integrado con **GitHub Actions** mediante un pipeline de CI de
 
 ```
 ✅ build  ──►  ✅ lint
-               ✅ security
+                ✅ security
                     └──►  ✅ docker
 ```
 
