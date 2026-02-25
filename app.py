@@ -1,8 +1,13 @@
 from flask import Flask, render_template, request, redirect, url_for, session, flash, jsonify
 import mysql.connector
+import time
 
 app = Flask(__name__)
 app.secret_key = 'claveSecreta' #¡¡No eliminar!! Sirve para pruebas Flasks
+
+MAX_INTENTOS_LOGIN   = 5    # intentos antes de bloquear
+TIEMPO_BLOQUEO_LOGIN = 60   # segundos de espera
+
 
 # Configuración de la base de datos (Docker)
 db_config = {
@@ -27,13 +32,29 @@ def main():
 #Dirección y metodo para inicio de sesión de la pagina
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-    #Al ser un post, pide el nombre y la contraseña del usuario
+    # Inicializar contadores en sesión si no existen
+    if 'login_intentos' not in session:
+        session['login_intentos'] = 0
+    if 'login_bloqueado_hasta' not in session:
+        session['login_bloqueado_hasta'] = None
+
+    # Comprobar si el usuario está bloqueado
+    if session['login_bloqueado_hasta']:
+        segundos_restantes = int(session['login_bloqueado_hasta'] - time.time())
+        if segundos_restantes > 0:
+            flash(f'🔒 Demasiados intentos fallidos. Espera {segundos_restantes} segundos antes de intentarlo de nuevo.')
+            return render_template('login.html', bloqueado=True, segundos_restantes=segundos_restantes)
+        else:
+            # El tiempo de bloqueo ha terminado, resetear contadores
+            session['login_intentos'] = 0
+            session['login_bloqueado_hasta'] = None
+
     if request.method == 'POST':
         user_input = request.form.get('username')
         pass_input = request.form.get('password')
 
         conn = get_db_connection()
-        cursor = conn.cursor(dictionary=True) #Maneja las consultas a la base de datos
+        cursor = conn.cursor(dictionary=True)
         cursor.execute(
             "SELECT * FROM Usuario WHERE nombreUsuario = %s AND contrasenyaUsuario = %s",
             (user_input, pass_input)
@@ -42,16 +63,29 @@ def login():
         cursor.close()
         conn.close()
 
-        #Si coincide, inicia sesión. Si no, muestra error.
+        # Funciones inicio sesión
         if user:
+            # Login correcto: resetear contadores y crear sesión
+            session['login_intentos'] = 0
+            session['login_bloqueado_hasta'] = None
             session['user_id'] = user['ID_USUARIO']
             session['username'] = user['nombreUsuario']
             return redirect(url_for('dashboard'))
         else:
-            flash('Usuario o contraseña incorrectos')
-            return redirect(url_for('login'))
+            # Login fallido: incrementar contador
+            session['login_intentos'] += 1
+            intentos_restantes = MAX_INTENTOS_LOGIN - session['login_intentos']
 
-    return render_template('login.html')
+            if session['login_intentos'] >= MAX_INTENTOS_LOGIN:
+                # Bloquear al usuario
+                session['login_bloqueado_hasta'] = time.time() + TIEMPO_BLOQUEO_LOGIN
+                flash(f'🔒 Has superado el límite de {MAX_INTENTOS_LOGIN} intentos fallidos. Espera {TIEMPO_BLOQUEO_LOGIN} segundos.')
+                return render_template('login.html', bloqueado=True, segundos_restantes=TIEMPO_BLOQUEO_LOGIN)
+            else:
+                flash(f'Usuario o contraseña incorrectos. Te quedan {intentos_restantes} intento(s).')
+                return redirect(url_for('login'))
+
+    return render_template('login.html', bloqueado=False, segundos_restantes=0)
 
 #Dirección para el dashboard
 @app.route('/dashboard')
