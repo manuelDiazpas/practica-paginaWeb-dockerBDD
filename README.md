@@ -293,13 +293,14 @@ La aplicación implementa varias medidas de seguridad alineadas con la guía **O
 
 **Control de acceso (OWASP A01):** todas las rutas que gestionan datos comprueban que existe una sesión activa antes de ejecutar cualquier operación. Las operaciones de escritura en BD filtran siempre por el `ID_USUARIO` de la sesión, impidiendo que un usuario acceda o modifique datos de otro.
 
-**Prevención de inyección SQL (OWASP A03):** todas las consultas a la base de datos utilizan **parámetros preparados** (`%s`), nunca concatenación de strings. Esto elimina la posibilidad de inyección SQL independientemente del input del usuario.
+**Prevención de inyección SQL (OWASP A05):** todas las consultas a la base de datos utilizan **parámetros preparados** (`%s`), nunca concatenación de strings. Esto elimina la posibilidad de inyección SQL independientemente del input del usuario.
 
 **Gestión de sesión y autenticación (OWASP A07):** las sesiones se gestionan mediante la librería de sesiones seguras de Flask, protegidas con una `secret_key`. El logout destruye la sesión por completo con `session.clear()`.
+Además, se ha implementado un limite de intentos, el cual al superar, obliga al usuario a esperar un tiempo determinado para volver a intentar inciar sesión.
 
 **Manejo de errores (OWASP A04):** los bloques `try/except` en las rutas de escritura capturan excepciones de base de datos y muestran mensajes genéricos al usuario, sin exponer trazas de pila ni detalles internos del sistema.
 
-**Modo debug controlado (OWASP A05):** el modo `debug=True` de Flask solo se activa cuando el script se ejecuta directamente (`if __name__ == '__main__'`), no cuando se despliega a través de un servidor WSGI en producción.
+**Modo debug controlado (OWASP A06):** el modo `debug=True` de Flask solo se activa cuando el script se ejecuta directamente (`if __name__ == '__main__'`), no cuando se despliega a través de un servidor WSGI en producción. Esto permite que durante el desarrollo, se pueda detectar de mejor forma los errores con un lanzamiento más meticuloso.
 
 ---
 
