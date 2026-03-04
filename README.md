@@ -84,11 +84,11 @@ pip install -r requirements.txt
 
 El proyecto utiliza **tres contenedores Docker** conectados entre sí a través de la red `mi-red-lista-compra`:
 
-| Contenedor              | Imagen                   | Puerto externo → interno | Descripción                   |
-| ----------------------- | ------------------------ | ------------------------ | ----------------------------- |
-| `flask-app`             | `flask-lista-cor:latest` | `5000:5000`              | Aplicación Flask              |
-| `mysql-contenedor`      | `mysql:latest`           | `5432:3306`              | Base de datos MySQL           |
-| `contenedor-phpmyadmin` | `phpmyadmin:latest`      | `8080:80`                | Panel de administración de BD |
+| Contenedor              | Imagen                      | Puerto externo → interno | Descripción                   |
+| ----------------------- | --------------------------- | ------------------------ | ----------------------------- |
+| `flask-app`             | `flask-lista-compra:latest` | `5000:5000`              | Aplicación Flask              |
+| `mysql-contenedor`      | `mysql:latest`              | `5432:3306`              | Base de datos MySQL           |
+| `contenedor-phpmyadmin` | `phpmyadmin:latest`         | `8080:80`                | Panel de administración de BD |
 
 > ⚠️ El puerto externo de MySQL es el **5432** (mapeado al 3306 interno). Por eso en `app.py` el puerto está configurado como `5432` y **no debe modificarse**.
 
@@ -128,13 +128,13 @@ phpMyAdmin estará disponible en: `http://127.0.0.1:8080`
 **4. Construir y levantar la aplicación Flask:**
 
 ```bash
-docker build -t flask-lista-cor .
+docker build -t flask-lista-compra .
 
 docker run -d \
   --name flask-app \
   --network mi-red-lista-compra \
   -p 5000:5000 \
-  flask-lista-cor:latest
+  flask-lista-compra:latest
 ```
 
 **5. Verificar que los tres contenedores están corriendo:**
