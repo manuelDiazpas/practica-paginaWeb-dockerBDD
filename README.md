@@ -315,7 +315,7 @@ Todas las consultas a la base de datos utilizan **parámetros preparados** (`%s`
 
 **Ejemplo de separación de parametros:**
 
-- app.py → linea 151.
+- [app.py](app.py) → linea 151.
 
 #### **Gestión de sesión y autenticación (OWASP A07):**
 
