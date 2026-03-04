@@ -557,7 +557,7 @@ Construye la imagen Docker completa a partir del [`Dockerfile`](Dockerfile) del 
 
 Los resultados de cada ejecución del pipeline están disponibles en la pestaña **Actions** del repositorio:
 
-https://github.com/manuelDiazpas/practica-paginaWeb-dockerBD/actions
+https://github.com/manuelDiazpas/practica-paginaWeb-dockerBDD/actions
 
 Cada apartado muestra un log detallado de su ejecución. Si alguno falla aparece una ❌ con el error exacto que lo ha provocado, permitiendo identificar y corregir el problema antes de que llegue a producción. Esto, no se tiene en cuenta con el primero que aparece, puesto que fue comenzado en una rama ajena al `main`
 
