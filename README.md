@@ -65,7 +65,7 @@ El usuario accede a través del navegador al puerto **5000** (Flask), que gestio
 
 - Python 3.13
 - Docker Desktop
-- Las dependencias listadas en `requirements.txt`:
+- Las dependencias listadas en [`requirements.txt`](requirements.txt):
 
 ```
 Flask
@@ -211,7 +211,7 @@ La base de datos se llama `paginaWebDB` y contiene tres tablas relacionadas entr
 
 ### 🏠 Página Principal
 
-**Ruta:** `GET /` — **Archivo:** `main.html`
+**Ruta:** `GET /` — **Archivo:** [`main.html`](templates/main.html)
 
 Página de bienvenida de la aplicación. Presenta el nombre de la app y un botón para acceder al login. Si el usuario ya tiene una sesión activa, se le redirige automáticamente al dashboard sin necesidad de volver a identificarse.
 
@@ -219,7 +219,7 @@ Página de bienvenida de la aplicación. Presenta el nombre de la app y un botó
 
 ### 🔐 Inicio de Sesión
 
-**Rutas:** `GET /login` (formulario) — `POST /login` (procesado) — **Archivo:** `login.html`
+**Rutas:** `GET /login` (formulario) — `POST /login` (procesado) — **Archivo:** [`login.html`](templates/login.html)
 
 El usuario introduce su nombre de usuario y contraseña. Flask consulta la tabla `Usuario` buscando coincidencia exacta de ambos campos:
 
@@ -232,7 +232,7 @@ El mensaje de error es genérico y no revela si el fallo fue en el usuario o en 
 
 ### 📋 Dashboard — Mi Lista
 
-**Ruta:** `GET /dashboard` — **Archivo:** `dashboard.html`
+**Ruta:** `GET /dashboard` — **Archivo:** [`dashboard.html`](templates/dashboard.html)
 
 Panel principal accesible únicamente por usuarios autenticados. Si se intenta acceder sin sesión activa, Flask redirige automáticamente al login. El dashboard presenta un **layout dividido en dos columnas**:
 
@@ -301,11 +301,11 @@ Las operaciones de escritura en BD filtran siempre por el `ID_USUARIO` de la ses
 
 **Sesión existente:**
 
-- app.py → lineas 28, 94, 122 y 181.
+- [app.py](app.py) → lineas 28, 94, 122 y 181.
 
 **Ejemplo de filtrado de usuarios:**
 
-- app.py → linea 151.
+- [app.py](app.py) → linea 151.
 
 #### **Prevención de inyección SQL (OWASP A05):**
 
@@ -326,11 +326,11 @@ El logout destruye la sesión por completo con `session.clear()`. Además, se ha
 
 **Secret-key:**
 
-- app.py → linea 6.
+- [app.py](app.py) → linea 6.
 
 **Session.clear():**
 
-- app.py → linea 211.
+- [app.py](app.py) → linea 211.
 
 #### **Manejo de errores (OWASP A04):**
 
@@ -340,7 +340,7 @@ Los bloques `try/except` en las rutas de escritura capturan excepciones de base 
 
 **Ejemplo try/except:**
 
-- app.py → linea 190-204.
+- [app.py](app.py) → linea 190-204.
 
 #### **Modo debug controlado (OWASP A06):**
 
@@ -351,13 +351,13 @@ Esto permite que se pueda detectar de mejor forma los [errores](https://cwe.mitr
 
 **Modo debug:**
 
-- app.py → linea 215.
+- [app.py](app.py) → linea 215.
 
 ---
 
 ## 🧪 Pruebas con Postman
 
-Las pruebas están definidas en la colección `PaginaWebPuestaProduccion` e incluyen **9 peticiones** que cubren los flujos principales y casos límite de la aplicación.
+Las pruebas están definidas en la colección [`PaginaWebPuestaProduccion`](PaginaWebPuestaProduccion.postman_collection.json) e incluyen **9 peticiones** que cubren los flujos principales y casos límite de la aplicación.
 
 ### Configuración previa
 
@@ -521,7 +521,7 @@ Verifica el borrado de múltiples productos en una sola petición, enviando el m
 
 ## ⚙️ Integración Continua con GitHub Actions
 
-El proyecto está integrado con **GitHub Actions** mediante un pipeline de CI definido en `.github/workflows/ci.yml`. Cada vez que se realiza un `push` o se abre un `pull request` sobre la rama `main`, GitHub ejecuta automáticamente los siguientes trabajos en cadena:
+El proyecto está integrado con **GitHub Actions** mediante un pipeline de CI definido en [`.github/workflows/ci.yml`](.github/workflows/ci.yml). Cada vez que se realiza un `push` o se abre un `pull request` sobre la rama [`main.html`](templates/main.html), GitHub ejecuta automáticamente los siguientes trabajos en cadena:
 
 ```
 ✅ build  ──►  ✅ lint
@@ -537,7 +537,7 @@ Cada sección depende del anterior mediante el atributo `needs`, de forma que si
 
 **`build` — Instalar dependencias**
 
-Configura Python 3.13, instala todo lo definido en `requirements.txt` y verifica que `app.py` no tiene errores de sintaxis con `py_compile`. Es la puerta de entrada al resto del pipeline: si las dependencias no instalan o el fichero tiene un error de sintaxis, el resto de comprobaciones no se ejecuta.
+Configura Python 3.13, instala todo lo definido en [`requirements.txt`](requirements.txt) y verifica que `app.py` no tiene errores de sintaxis con `py_compile`. Es la puerta de entrada al resto del pipeline: si las dependencias no instalan o el fichero tiene un error de sintaxis, el resto de comprobaciones no se ejecuta.
 
 **`lint` — Análisis de código**
 
@@ -549,7 +549,7 @@ Ejecuta `bandit`, una herramienta de análisis estático de seguridad para Pytho
 
 **`docker` — Build de imagen**
 
-Construye la imagen Docker completa a partir del `Dockerfile` del proyecto para verificar que la imagen es válida y se construye sin errores. Solo se ejecuta si `build` y `lint` han pasado previamente.
+Construye la imagen Docker completa a partir del [`Dockerfile`](Dockerfile) del proyecto para verificar que la imagen es válida y se construye sin errores. Solo se ejecuta si `build` y `lint` han pasado previamente.
 
 ---
 
@@ -557,9 +557,7 @@ Construye la imagen Docker completa a partir del `Dockerfile` del proyecto para 
 
 Los resultados de cada ejecución del pipeline están disponibles en la pestaña **Actions** del repositorio:
 
-```
 https://github.com/manuelDiazpas/practica-paginaWeb-dockerBD/actions
-```
 
 Cada apartado muestra un log detallado de su ejecución. Si alguno falla aparece una ❌ con el error exacto que lo ha provocado, permitiendo identificar y corregir el problema antes de que llegue a producción. Esto, no se tiene en cuenta con el primero que aparece, puesto que fue comenzado en una rama ajena al `main`
 
