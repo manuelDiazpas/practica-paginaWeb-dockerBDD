@@ -145,7 +145,7 @@ docker ps
 
 Deberías ver `flask-app`, `mysql-contenedor` y `contenedor-phpmyadmin` con estado activo.
 
-La app estará disponible en: `http://127.0.0.1:5000`
+Una vez hecho esto y ejecutado el archivo python '[app.py](app.py)', la app estará disponible en: `http://127.0.0.1:5000`
 
 ---
 
