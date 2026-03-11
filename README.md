@@ -366,13 +366,13 @@ En todas las peticiones (excepto pruebas de acceso sin sesión) deben estar acti
 - **Automatically follow redirects** → para que Postman siga las redirecciones `302` de Flask hasta la página final.
 - **Cookie jar** → para mantener la sesión activa entre peticiones y poder acceder al dashboard tras el login.
 
-En el caso de querer realizar las pruebas sin tener todos los dockers bajados, es posible bajar la red directamente y usar las pruebas sin necesidad de los otros dockers.
+En el caso de querer realizar las pruebas sin tener todos los dockers bajados, es posible realizar las pruebas estando conectado a la red general del dispositivo original (o del host que haya bajado los contenedores).
 
 No obstante, se deberá cambiar la url y sustituir la ip por la del dispositivo en el que se esté trabajando.
 
 #### EJEMPLO:
 
-Si hay una prueba con la url `http://127.0.0.1:5000/`, y la ip del nuevo equipo es `192.168.1.34`, se deberá cambiar a `http://192.168.1.34:5000/`.
+Si hay una prueba con la url `http://127.0.0.1:5000/`, y la ip del nuevo host es `10.50.4.21`, se deberá cambiar a `http://10.50.4.21:5000/`.
 
 ---
 
