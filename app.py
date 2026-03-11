@@ -213,4 +213,4 @@ def logout():
 
 #Metodo para debuguear si es __main__ el nombre
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host="0.0.0.0", port=5000)
