@@ -20,7 +20,7 @@
 
 ---
 
-## 🛠️ Tecnologías utilizadas
+## Tecnologías utilizadas
 
 | Capa              | Tecnología                        |
 | ----------------- | --------------------------------- |
@@ -34,7 +34,7 @@
 
 ---
 
-## 🏗️ Arquitectura del proyecto
+## Arquitectura del proyecto
 
 La aplicación sigue una arquitectura de **tres capas** desplegada completamente en Docker:
 
@@ -80,7 +80,7 @@ pip install -r requirements.txt
 
 ---
 
-## 🚀 Instalación y Arranque
+## Instalación y Arranque
 
 El proyecto utiliza **tres contenedores Docker** conectados entre sí a través de la red `mi-red-lista-compra`:
 
@@ -186,7 +186,7 @@ practica-paginaWeb-dockerBDD/
 
 ---
 
-## 🗄️ Base de Datos
+## Base de Datos
 
 La base de datos se llama `paginaWebDB` y contiene tres tablas relacionadas entre sí:
 
@@ -207,9 +207,9 @@ La base de datos se llama `paginaWebDB` y contiene tres tablas relacionadas entr
 
 ---
 
-## ✨ Funcionalidades
+## Funcionalidades
 
-### 🏠 Página Principal
+### Página Principal
 
 **Ruta:** `GET /` — **Archivo:** [`main.html`](templates/main.html)
 
@@ -217,7 +217,7 @@ Página de bienvenida de la aplicación. Presenta el nombre de la app y un botó
 
 ---
 
-### 🔐 Inicio de Sesión
+### Inicio de Sesión
 
 **Rutas:** `GET /login` (formulario) — `POST /login` (procesado) — **Archivo:** [`login.html`](templates/login.html)
 
@@ -230,7 +230,7 @@ El mensaje de error es genérico y no revela si el fallo fue en el usuario o en 
 
 ---
 
-### 📋 Dashboard — Mi Lista
+### Dashboard — Mi Lista
 
 **Ruta:** `GET /dashboard` — **Archivo:** [`dashboard.html`](templates/dashboard.html)
 
@@ -242,7 +242,7 @@ Panel principal accesible únicamente por usuarios autenticados. Si se intenta a
 
 ---
 
-### ➕ Añadir Producto
+### Añadir Producto
 
 **Ruta:** `POST /add_product`
 
@@ -256,7 +256,7 @@ La cantidad debe ser un número entero mayor que cero. Si se envía una cantidad
 
 ---
 
-### 🗑️ Eliminar Producto/s
+### Eliminar Producto/s
 
 **Ruta:** `POST /delete_products`
 
@@ -266,7 +266,7 @@ Flask recibe los `ID_LISTA_COMPRA` seleccionados y ejecuta un `DELETE` filtrando
 
 ---
 
-### 🚪 Cerrar Sesión
+### Cerrar Sesión
 
 **Ruta:** `GET /logout`
 
@@ -274,7 +274,7 @@ Destruye completamente la sesión del usuario con `session.clear()` y redirige a
 
 ---
 
-## 🔗 Rutas de la API Flask
+## Rutas de la API Flask
 
 | Método | Ruta               | Acceso      | Descripción                                     |
 | ------ | ------------------ | ----------- | ----------------------------------------------- |
@@ -355,7 +355,7 @@ Esto permite que se pueda detectar de mejor forma los [errores](https://cwe.mitr
 
 ---
 
-## 🧪 Pruebas con Postman
+## Pruebas con Postman
 
 Las pruebas están definidas en la colección [`PaginaWebPuestaProduccion`](PaginaWebPuestaProduccion.postman_collection.json) e incluyen **9 peticiones** que cubren los flujos principales y casos límite de la aplicación.
 
@@ -519,7 +519,7 @@ Verifica el borrado de múltiples productos en una sola petición, enviando el m
 
 ---
 
-## ⚙️ Integración Continua con GitHub Actions
+## Integración Continua con GitHub Actions
 
 El proyecto está integrado con **GitHub Actions** mediante un pipeline de CI definido en [`.github/workflows/ci.yml`](.github/workflows/ci.yml). Cada vez que se realiza un `push` o se abre un `pull request` sobre la rama [`main.html`](templates/main.html), GitHub ejecuta automáticamente los siguientes trabajos en cadena:
 
